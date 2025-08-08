@@ -594,7 +594,7 @@ function UILibrary:CreateWindow(options)
                    BackgroundColor3 = Color3.fromRGB(50, 50, 60)
                }):Play()
                TweenService:Create(ButtonStroke, TweenInfo.new(0.3), {
-                   Color = Color3.fromRGB(120, 160,)
+                   Color = Color3.fromRGB(35, 35, 45), 
                    Transparency = 0.3
                }):Play()
            end)
