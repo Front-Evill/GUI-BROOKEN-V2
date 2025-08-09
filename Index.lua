@@ -691,11 +691,11 @@ function FRONT_GUI:CreateWindow(config)
        NotificationIcon.Position = UDim2.fromOffset(15, 12)
        
        local AccentColor = Theme.Accent
-       if Type == "Success" then
+       if Type == "Suc" then
            AccentColor = Theme.Success
-       elseif Type == "Warning" then
+       elseif Type == "War" then
            AccentColor = Theme.Warning
-       elseif Type == "Error" then
+       elseif Type == "Er" then
            AccentColor = Theme.Error
        end
        
