@@ -325,7 +325,6 @@ function FRONT_GUI:CreateWindow(config)
 
   local MaximizeButton = Instance.new("ImageButton")
   MaximizeButton.Parent = ButtonsFrame
-  MaximizeButton.BackgroundColor3 = Color3.fromRGB(85, 255, 85)
   MaximizeButton.BackgroundTransparency = 0.2
   MaximizeButton.BorderSizePixel = 0
   MaximizeButton.Size = UDim2.fromOffset(38, 38)
@@ -338,7 +337,6 @@ function FRONT_GUI:CreateWindow(config)
 
   local MinimizeButton = Instance.new("ImageButton")
   MinimizeButton.Parent = ButtonsFrame
-  MinimizeButton.BackgroundColor3 = Color3.fromRGB(255, 170, 85)
   MinimizeButton.BackgroundTransparency = 0.2
   MinimizeButton.BorderSizePixel = 0
   MinimizeButton.Size = UDim2.fromOffset(38, 38)
@@ -351,7 +349,6 @@ function FRONT_GUI:CreateWindow(config)
 
   local CloseButton = Instance.new("ImageButton")
   CloseButton.Parent = ButtonsFrame
-  CloseButton.BackgroundColor3 = Color3.fromRGB(255, 85, 85)
   CloseButton.BackgroundTransparency = 0.2
   CloseButton.BorderSizePixel = 0
   CloseButton.Size = UDim2.fromOffset(38, 38)
