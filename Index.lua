@@ -329,7 +329,7 @@ function FRONT_GUI:CreateWindow(config)
   MaximizeButton.BackgroundTransparency = 0.2
   MaximizeButton.BorderSizePixel = 0
   MaximizeButton.Size = UDim2.fromOffset(38, 38)
-  MaximizeButton.Image = "rbxassetid://118135004396306"
+  MaximizeButton.Image = "rbxassetid://74818383222024"
   MaximizeButton.ImageColor3 = Color3.fromRGB(255, 255, 255)
 
   local MaximizeCorner = Instance.new("UICorner")
@@ -355,7 +355,7 @@ function FRONT_GUI:CreateWindow(config)
   CloseButton.BackgroundTransparency = 0.2
   CloseButton.BorderSizePixel = 0
   CloseButton.Size = UDim2.fromOffset(38, 38)
-  CloseButton.Image = "rbxassetid://74818383222024"
+  CloseButton.Image = "rbxassetid://118135004396306"
   CloseButton.ImageColor3 = Color3.fromRGB(255, 255, 255)
 
   local CloseCorner = Instance.new("UICorner")
