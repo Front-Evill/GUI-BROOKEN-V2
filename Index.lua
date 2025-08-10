@@ -99,6 +99,14 @@ local Themes = {
    }
 }
 
+local Icons = {
+   settings = "rbxassetid://10734950309"
+}
+
+local function GetIconId(iconName)
+   return Icons[iconName] or ""
+end
+
 local function CreateTween(object, info, properties)
    return TweenService:Create(object, info, properties)
 end
@@ -534,12 +542,27 @@ function FRONT_GUI:CreateWindow(config)
    CloseStroke.Transparency = 0.5
    CloseStroke.Parent = CloseButton
 
+   local TabsFrame = Instance.new("Frame")
+   TabsFrame.Name = "TabsFrame"
+   TabsFrame.Parent = MainFrame
+   TabsFrame.BackgroundTransparency = 1
+   TabsFrame.Size = UDim2.new(0, 200, 1, -85)
+   TabsFrame.Position = UDim2.fromOffset(15, 70)
+
+   local TabsLayout = Instance.new("UIListLayout")
+   TabsLayout.Parent = TabsFrame
+   TabsLayout.FillDirection = Enum.FillDirection.Vertical
+   TabsLayout.HorizontalAlignment = Enum.HorizontalAlignment.Left
+   TabsLayout.VerticalAlignment = Enum.VerticalAlignment.Top
+   TabsLayout.Padding = UDim.new(0, 4)
+   TabsLayout.SortOrder = Enum.SortOrder.LayoutOrder
+
    local ContentFrame = Instance.new("Frame")
    ContentFrame.Name = "ContentFrame"
    ContentFrame.Parent = MainFrame
    ContentFrame.BackgroundTransparency = 1
-   ContentFrame.Size = UDim2.new(1, -30, 1, -85)
-   ContentFrame.Position = UDim2.fromOffset(15, 70)
+   ContentFrame.Size = UDim2.new(1, -245, 1, -85)
+   ContentFrame.Position = UDim2.fromOffset(230, 70)
 
    local TimeLabel = Instance.new("TextLabel")
    TimeLabel.Parent = MainFrame
@@ -553,376 +576,519 @@ function FRONT_GUI:CreateWindow(config)
    TimeLabel.TextXAlignment = Enum.TextXAlignment.Left
 
    local FloatingIcon = Instance.new("ImageLabel")
-   FloatingIcon.Name = "FloatingIcon"
-   FloatingIcon.Parent = ScreenGui
-   FloatingIcon.BackgroundColor3 = Theme.Accent
-   FloatingIcon.BackgroundTransparency = 0.05
-   FloatingIcon.BorderSizePixel = 0
-   FloatingIcon.Size = UDim2.fromOffset(65, 65)
-   FloatingIcon.Position = UDim2.fromOffset(30, 30)
-   FloatingIcon.Image = IconImage
-   FloatingIcon.ScaleType = Enum.ScaleType.Crop
-   FloatingIcon.Visible = false
+  FloatingIcon.Name = "FloatingIcon"
+  FloatingIcon.Parent = ScreenGui
+  FloatingIcon.BackgroundColor3 = Theme.Accent
+  FloatingIcon.BackgroundTransparency = 0.05
+  FloatingIcon.BorderSizePixel = 0
+  FloatingIcon.Size = UDim2.fromOffset(65, 65)
+  FloatingIcon.Position = UDim2.fromOffset(30, 30)
+  FloatingIcon.Image = IconImage
+  FloatingIcon.ScaleType = Enum.ScaleType.Crop
+  FloatingIcon.Visible = false
 
-   local FloatingCorner = Instance.new("UICorner")
-   FloatingCorner.CornerRadius = UDim.new(1, 0)
-   FloatingCorner.Parent = FloatingIcon
+  local FloatingCorner = Instance.new("UICorner")
+  FloatingCorner.CornerRadius = UDim.new(1, 0)
+  FloatingCorner.Parent = FloatingIcon
 
-   local FloatingStroke = Instance.new("UIStroke")
-   FloatingStroke.Color = Theme.Accent
-   FloatingStroke.Thickness = 3
-   FloatingStroke.Transparency = 0.2
-   FloatingStroke.Parent = FloatingIcon
+  local FloatingStroke = Instance.new("UIStroke")
+  FloatingStroke.Color = Theme.Accent
+  FloatingStroke.Thickness = 3
+  FloatingStroke.Transparency = 0.2
+  FloatingStroke.Parent = FloatingIcon
 
-   local FloatingButton = Instance.new("TextButton")
-   FloatingButton.Parent = FloatingIcon
-   FloatingButton.BackgroundTransparency = 1
-   FloatingButton.Size = UDim2.new(1, 0, 1, 0)
-   FloatingButton.Text = ""
+  local FloatingButton = Instance.new("TextButton")
+  FloatingButton.Parent = FloatingIcon
+  FloatingButton.BackgroundTransparency = 1
+  FloatingButton.Size = UDim2.new(1, 0, 1, 0)
+  FloatingButton.Text = ""
 
-   local FloatingGradient = Instance.new("UIGradient")
-   FloatingGradient.Color = ColorSequence.new{
-       ColorSequenceKeypoint.new(0, Theme.Accent),
-       ColorSequenceKeypoint.new(1, Color3.fromRGB(
-           math.min(255, Theme.Accent.R * 255 * 1.4),
-           math.min(255, Theme.Accent.G * 255 * 1.4),
-           math.min(255, Theme.Accent.B * 255 * 1.4)
-       ))
-   }
-   FloatingGradient.Rotation = 45
-   FloatingGradient.Parent = FloatingIcon
+  local FloatingGradient = Instance.new("UIGradient")
+  FloatingGradient.Color = ColorSequence.new{
+      ColorSequenceKeypoint.new(0, Theme.Accent),
+      ColorSequenceKeypoint.new(1, Color3.fromRGB(
+          math.min(255, Theme.Accent.R * 255 * 1.4),
+          math.min(255, Theme.Accent.G * 255 * 1.4),
+          math.min(255, Theme.Accent.B * 255 * 1.4)
+      ))
+  }
+  FloatingGradient.Rotation = 45
+  FloatingGradient.Parent = FloatingIcon
 
-   local FloatingPulse = CreateTween(FloatingIcon, TweenInfo.new(2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), {
-       Size = UDim2.fromOffset(70, 70)
-   })
+  local FloatingPulse = CreateTween(FloatingIcon, TweenInfo.new(2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), {
+      Size = UDim2.fromOffset(70, 70)
+  })
 
-   local FloatingRotate = CreateTween(FloatingIcon, TweenInfo.new(8, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1), {
-       Rotation = 360
-   })
+  local FloatingRotate = CreateTween(FloatingIcon, TweenInfo.new(8, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1), {
+      Rotation = 360
+  })
 
-   MakeDraggable(MainFrame, TitleBar)
-   MakeDraggable(FloatingIcon, FloatingIcon)
+  MakeDraggable(MainFrame, TitleBar)
+  MakeDraggable(FloatingIcon, FloatingIcon)
 
-   local isMaximized = false
-   local originalSize = Size
-   local originalPosition = UDim2.fromScale(0.5, 0.5)
+  local isMaximized = false
+  local originalSize = Size
+  local originalPosition = UDim2.fromScale(0.5, 0.5)
+  local currentTab = nil
 
-   local function ShowWindow()
-       MainFrame.Visible = true
-       FloatingIcon.Visible = false
-       FloatingPulse:Cancel()
-       FloatingRotate:Cancel()
-       CreateTween(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-           Size = isMaximized and UDim2.fromScale(0.9, 0.9) or originalSize
-       }):Play()
-   end
+  local function ShowWindow()
+      MainFrame.Visible = true
+      FloatingIcon.Visible = false
+      FloatingPulse:Cancel()
+      FloatingRotate:Cancel()
+      CreateTween(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+          Size = isMaximized and UDim2.fromScale(0.9, 0.9) or originalSize
+      }):Play()
+  end
 
-   local function HideWindow()
-       CreateTween(MainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
-           Size = UDim2.fromOffset(0, 0)
-       }):Play()
-       task.wait(0.4)
-       MainFrame.Visible = false
-       FloatingIcon.Visible = true
-       FloatingPulse:Play()
-       FloatingRotate:Play()
-   end
+  local function HideWindow()
+      CreateTween(MainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
+          Size = UDim2.fromOffset(0, 0)
+      }):Play()
+      task.wait(0.4)
+      MainFrame.Visible = false
+      FloatingIcon.Visible = true
+      FloatingPulse:Play()
+      FloatingRotate:Play()
+  end
 
-   local function MaximizeWindow()
-       isMaximized = not isMaximized
-       if isMaximized then
-           CreateTween(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
-               Size = UDim2.fromScale(0.9, 0.9),
-               Position = UDim2.fromScale(0.5, 0.5)
-           }):Play()
-       else
-           CreateTween(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
-               Size = originalSize,
-               Position = originalPosition
-           }):Play()
-       end
-   end
+  local function MaximizeWindow()
+      isMaximized = not isMaximized
+      if isMaximized then
+          CreateTween(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+              Size = UDim2.fromScale(0.9, 0.9),
+              Position = UDim2.fromScale(0.5, 0.5)
+          }):Play()
+      else
+          CreateTween(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+              Size = originalSize,
+              Position = originalPosition
+          }):Play()
+      end
+  end
 
-   local function CreateButtonHover(button, hoverColor)
-       local originalColor = button.BackgroundColor3
-       button.MouseEnter:Connect(function()
-           CreateTween(button, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
-               BackgroundColor3 = hoverColor or Theme.Accent,
-               BackgroundTransparency = 0.05,
-               TextTransparency = 0
-           }):Play()
-           CreateTween(button:FindFirstChild("UIStroke"), TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
-               Transparency = 0.2
-           }):Play()
-       end)
-       
-       button.MouseLeave:Connect(function()
-           CreateTween(button, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
-               BackgroundColor3 = originalColor,
-               BackgroundTransparency = 0.2,
-               TextTransparency = 0.2
-           }):Play()
-           CreateTween(button:FindFirstChild("UIStroke"), TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
-               Transparency = 0.5
-           }):Play()
-       end)
-   end
+  local function CreateButtonHover(button, hoverColor)
+      local originalColor = button.BackgroundColor3
+      button.MouseEnter:Connect(function()
+          CreateTween(button, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+              BackgroundColor3 = hoverColor or Theme.Accent,
+              BackgroundTransparency = 0.05,
+              TextTransparency = 0
+          }):Play()
+          CreateTween(button:FindFirstChild("UIStroke"), TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+              Transparency = 0.2
+          }):Play()
+      end)
+      
+      button.MouseLeave:Connect(function()
+          CreateTween(button, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+              BackgroundColor3 = originalColor,
+              BackgroundTransparency = 0.2,
+              TextTransparency = 0.2
+          }):Play()
+          CreateTween(button:FindFirstChild("UIStroke"), TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+              Transparency = 0.5
+          }):Play()
+      end)
+  end
 
-   CreateButtonHover(MaximizeButton, Theme.Success)
-   CreateButtonHover(MinimizeButton, Theme.Warning)
-   CreateButtonHover(CloseButton, Theme.Error)
+  CreateButtonHover(MaximizeButton, Theme.Success)
+  CreateButtonHover(MinimizeButton, Theme.Warning)
+  CreateButtonHover(CloseButton, Theme.Error)
 
-   CloseButton.MouseButton1Click:Connect(function()
-       CreateTween(MainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
-           Size = UDim2.fromOffset(0, 0)
-       }):Play()
-       task.wait(0.3)
-       ScreenGui:Destroy()
-   end)
+  CloseButton.MouseButton1Click:Connect(function()
+      CreateTween(MainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
+          Size = UDim2.fromOffset(0, 0)
+      }):Play()
+      task.wait(0.3)
+      ScreenGui:Destroy()
+  end)
 
-   MinimizeButton.MouseButton1Click:Connect(HideWindow)
-   MaximizeButton.MouseButton1Click:Connect(MaximizeWindow)
-   FloatingButton.MouseButton1Click:Connect(ShowWindow)
+  MinimizeButton.MouseButton1Click:Connect(HideWindow)
+  MaximizeButton.MouseButton1Click:Connect(MaximizeWindow)
+  FloatingButton.MouseButton1Click:Connect(ShowWindow)
 
-   UserInputService.InputBegan:Connect(function(input, gameProcessed)
-       if not gameProcessed and input.KeyCode == MinimizeKey then
-           if MainFrame.Visible then
-               HideWindow()
-           else
-               ShowWindow()
-           end
-       end
-   end)
+  UserInputService.InputBegan:Connect(function(input, gameProcessed)
+      if not gameProcessed and input.KeyCode == MinimizeKey then
+          if MainFrame.Visible then
+              HideWindow()
+          else
+              ShowWindow()
+          end
+      end
+  end)
 
-   local function UpdateTimer()
-       local elapsed = tick() - StartTime
-       TimeLabel.Text = "Uptime: " .. FormatTime(elapsed)
-   end
+  local function UpdateTimer()
+      local elapsed = tick() - StartTime
+      TimeLabel.Text = "Uptime: " .. FormatTime(elapsed)
+  end
 
-   local timerConnection = RunService.Heartbeat:Connect(UpdateTimer)
+  local timerConnection = RunService.Heartbeat:Connect(UpdateTimer)
 
-   local NotificationCount = 0
-   
-   function Window:Notify(config)
-       local Title = config.Title or "Notification"
-       local Content = config.Content or "This is a notification"
-       local Duration = config.Duration or 4
-       local SoundId = config.SoundId or nil
-       
-       NotificationCount = NotificationCount + 1
-       
-       if SoundId then
-           local sound = Instance.new("Sound")
-           sound.SoundId = SoundId
-           sound.Volume = 0.5
-           sound.Parent = SoundService
-           sound:Play()
-           sound.Ended:Connect(function()
-               sound:Destroy()
-           end)
-       end
-       
-       local NotificationFrame = Instance.new("Frame")
-       NotificationFrame.Name = "Notification_" .. NotificationCount
-       NotificationFrame.Parent = NotificationContainer
-       NotificationFrame.BackgroundColor3 = Theme.Secondary
-       NotificationFrame.BackgroundTransparency = 0.1
-       NotificationFrame.BorderSizePixel = 0
-       NotificationFrame.Size = UDim2.new(1, 0, 0, 70)
-       NotificationFrame.Position = UDim2.new(1, 30, 0, 0)
-       NotificationFrame.LayoutOrder = NotificationCount
-       
-       local NotificationCorner = Instance.new("UICorner")
-       NotificationCorner.CornerRadius = UDim.new(0, 16)
-       NotificationCorner.Parent = NotificationFrame
-       
-       local NotificationStroke = Instance.new("UIStroke")
-       NotificationStroke.Color = Theme.Border
-       NotificationStroke.Thickness = 1
-       NotificationStroke.Transparency = 0.3
-       NotificationStroke.Parent = NotificationFrame
-       
-       local NotificationGradient = Instance.new("UIGradient")
-       NotificationGradient.Color = ColorSequence.new{
-           ColorSequenceKeypoint.new(0, Theme.Secondary),
-           ColorSequenceKeypoint.new(1, Color3.fromRGB(
-               math.min(255, Theme.Secondary.R * 255 + 12),
-               math.min(255, Theme.Secondary.G * 255 + 12),
-               math.min(255, Theme.Secondary.B * 255 + 12)
-           ))
-       }
-       NotificationGradient.Rotation = 90
-       NotificationGradient.Parent = NotificationFrame
-       
-       local NotificationIcon = Instance.new("ImageLabel")
-       NotificationIcon.Parent = NotificationFrame
-       NotificationIcon.BackgroundColor3 = Theme.Accent
-       NotificationIcon.BackgroundTransparency = 0.1
-       NotificationIcon.BorderSizePixel = 0
-       NotificationIcon.Size = UDim2.fromOffset(28, 28)
-       NotificationIcon.Position = UDim2.fromOffset(15, 15)
-       NotificationIcon.Image = IconImage
-       NotificationIcon.ScaleType = Enum.ScaleType.Crop
-       
-       local NotificationIconCorner = Instance.new("UICorner")
-       NotificationIconCorner.CornerRadius = UDim.new(0, 8)
-       NotificationIconCorner.Parent = NotificationIcon
-       
-       local NotificationIconStroke = Instance.new("UIStroke")
-       NotificationIconStroke.Color = Theme.Accent
-       NotificationIconStroke.Thickness = 2
-       NotificationIconStroke.Transparency = 0.4
-       NotificationIconStroke.Parent = NotificationIcon
-       
-       local NotificationTitle = Instance.new("TextLabel")
-       NotificationTitle.Parent = NotificationFrame
-       NotificationTitle.BackgroundTransparency = 1
-       NotificationTitle.Size = UDim2.new(1, -90, 0, 20)
-       NotificationTitle.Position = UDim2.fromOffset(55, 8)
-       NotificationTitle.Text = Title
-       NotificationTitle.TextColor3 = Theme.Text
-       NotificationTitle.TextSize = 14
-       NotificationTitle.Font = Enum.Font.GothamBold
-       NotificationTitle.TextXAlignment = Enum.TextXAlignment.Left
-       NotificationTitle.TextTruncate = Enum.TextTruncate.AtEnd
-       
-       local NotificationContent = Instance.new("TextLabel")
-       NotificationContent.Parent = NotificationFrame
-       NotificationContent.BackgroundTransparency = 1
-       NotificationContent.Size = UDim2.new(1, -90, 0, 32)
-       NotificationContent.Position = UDim2.fromOffset(55, 25)
-       NotificationContent.Text = Content
-       NotificationContent.TextColor3 = Theme.SubText
-       NotificationContent.TextSize = 12
-       NotificationContent.Font = Enum.Font.Gotham
-       NotificationContent.TextXAlignment = Enum.TextXAlignment.Left
-       NotificationContent.TextWrapped = true
-       NotificationContent.TextTruncate = Enum.TextTruncate.AtEnd
-       
-       local CloseNotificationButton = Instance.new("TextButton")
-       CloseNotificationButton.Parent = NotificationFrame
-       CloseNotificationButton.BackgroundColor3 = Theme.Error
-       CloseNotificationButton.BackgroundTransparency = 0.8
-       CloseNotificationButton.BorderSizePixel = 0
-       CloseNotificationButton.Size = UDim2.fromOffset(24, 24)
-       CloseNotificationButton.Position = UDim2.new(1, -32, 0, 8)
-       CloseNotificationButton.Text = "✕"
-       CloseNotificationButton.TextColor3 = Theme.Error
-       CloseNotificationButton.TextSize = 14
-       CloseNotificationButton.Font = Enum.Font.GothamBold
-       CloseNotificationButton.TextTransparency = 0.3
-       
-       local CloseNotificationCorner = Instance.new("UICorner")
-       CloseNotificationCorner.CornerRadius = UDim.new(0, 8)
-       CloseNotificationCorner.Parent = CloseNotificationButton
-       
-       CloseNotificationButton.MouseEnter:Connect(function()
-           CreateTween(CloseNotificationButton, TweenInfo.new(0.2), {
-               BackgroundTransparency = 0.2,
-               TextTransparency = 0
-           }):Play()
-       end)
-       
-       CloseNotificationButton.MouseLeave:Connect(function()
-           CreateTween(CloseNotificationButton, TweenInfo.new(0.2), {
-               BackgroundTransparency = 0.8,
-               TextTransparency = 0.3
-           }):Play()
-       end)
-       
-       NotificationFrame.Position = UDim2.new(1, 30, 0, 0)
-       NotificationFrame.BackgroundTransparency = 1
-       NotificationStroke.Transparency = 1
-       
-       CreateTween(NotificationFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
-           BackgroundTransparency = 0.1
-       }):Play()
-       
-       CreateTween(NotificationStroke, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
-           Transparency = 0.3
-       }):Play()
-       
-       CreateTween(NotificationFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-           Position = UDim2.new(0, 0, 0, 0)
-       }):Play()
-       
-       local function CloseNotification()
-           CreateTween(NotificationFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
-               Position = UDim2.new(1, 30, 0, 0),
-               BackgroundTransparency = 1
-           }):Play()
-           
-           CreateTween(NotificationStroke, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
-               Transparency = 1
-           }):Play()
-           
-           task.wait(0.3)
-           NotificationFrame:Destroy()
-       end
-       
-       CloseNotificationButton.MouseButton1Click:Connect(CloseNotification)
-       
-       if Duration and Duration > 0 then
-           task.spawn(function()
-               task.wait(Duration + 0.4)
-               if NotificationFrame.Parent then
-                   CloseNotification()
-               end
-           end)
-       end
-       
-       NotificationFrame.InputBegan:Connect(function(input)
-           if input.UserInputType == Enum.UserInputType.MouseButton1 then
-               CloseNotification()
-           end
-       end)
-   end
+  local NotificationCount = 0
+  
+  function Window:Notify(config)
+      local Title = config.Title or "Notification"
+      local Content = config.Content or "This is a notification"
+      local Duration = config.Duration or 4
+      local SoundId = config.SoundId or nil
+      
+      NotificationCount = NotificationCount + 1
+      
+      if SoundId then
+          local sound = Instance.new("Sound")
+          sound.SoundId = SoundId
+          sound.Volume = 0.5
+          sound.Parent = SoundService
+          sound:Play()
+          sound.Ended:Connect(function()
+              sound:Destroy()
+          end)
+      end
+      
+      local NotificationFrame = Instance.new("Frame")
+      NotificationFrame.Name = "Notification_" .. NotificationCount
+      NotificationFrame.Parent = NotificationContainer
+      NotificationFrame.BackgroundColor3 = Theme.Secondary
+      NotificationFrame.BackgroundTransparency = 0.1
+      NotificationFrame.BorderSizePixel = 0
+      NotificationFrame.Size = UDim2.new(1, 0, 0, 70)
+      NotificationFrame.Position = UDim2.new(1, 30, 0, 0)
+      NotificationFrame.LayoutOrder = NotificationCount
+      
+      local NotificationCorner = Instance.new("UICorner")
+      NotificationCorner.CornerRadius = UDim.new(0, 16)
+      NotificationCorner.Parent = NotificationFrame
+      
+      local NotificationStroke = Instance.new("UIStroke")
+      NotificationStroke.Color = Theme.Border
+      NotificationStroke.Thickness = 1
+      NotificationStroke.Transparency = 0.3
+      NotificationStroke.Parent = NotificationFrame
+      
+      local NotificationGradient = Instance.new("UIGradient")
+      NotificationGradient.Color = ColorSequence.new{
+          ColorSequenceKeypoint.new(0, Theme.Secondary),
+          ColorSequenceKeypoint.new(1, Color3.fromRGB(
+              math.min(255, Theme.Secondary.R * 255 + 12),
+              math.min(255, Theme.Secondary.G * 255 + 12),
+              math.min(255, Theme.Secondary.B * 255 + 12)
+          ))
+      }
+      NotificationGradient.Rotation = 90
+      NotificationGradient.Parent = NotificationFrame
+      
+      local NotificationIcon = Instance.new("ImageLabel")
+      NotificationIcon.Parent = NotificationFrame
+      NotificationIcon.BackgroundColor3 = Theme.Accent
+      NotificationIcon.BackgroundTransparency = 0.1
+      NotificationIcon.BorderSizePixel = 0
+      NotificationIcon.Size = UDim2.fromOffset(28, 28)
+      NotificationIcon.Position = UDim2.fromOffset(15, 15)
+      NotificationIcon.Image = IconImage
+      NotificationIcon.ScaleType = Enum.ScaleType.Crop
+      
+      local NotificationIconCorner = Instance.new("UICorner")
+      NotificationIconCorner.CornerRadius = UDim.new(0, 8)
+      NotificationIconCorner.Parent = NotificationIcon
+      
+      local NotificationIconStroke = Instance.new("UIStroke")
+      NotificationIconStroke.Color = Theme.Accent
+      NotificationIconStroke.Thickness = 2
+      NotificationIconStroke.Transparency = 0.4
+      NotificationIconStroke.Parent = NotificationIcon
+      
+      local NotificationTitle = Instance.new("TextLabel")
+      NotificationTitle.Parent = NotificationFrame
+      NotificationTitle.BackgroundTransparency = 1
+      NotificationTitle.Size = UDim2.new(1, -90, 0, 20)
+      NotificationTitle.Position = UDim2.fromOffset(55, 8)
+      NotificationTitle.Text = Title
+      NotificationTitle.TextColor3 = Theme.Text
+      NotificationTitle.TextSize = 14
+      NotificationTitle.Font = Enum.Font.GothamBold
+      NotificationTitle.TextXAlignment = Enum.TextXAlignment.Left
+      NotificationTitle.TextTruncate = Enum.TextTruncate.AtEnd
+      
+      local NotificationContent = Instance.new("TextLabel")
+      NotificationContent.Parent = NotificationFrame
+      NotificationContent.BackgroundTransparency = 1
+      NotificationContent.Size = UDim2.new(1, -90, 0, 32)
+      NotificationContent.Position = UDim2.fromOffset(55, 25)
+      NotificationContent.Text = Content
+      NotificationContent.TextColor3 = Theme.SubText
+      NotificationContent.TextSize = 12
+      NotificationContent.Font = Enum.Font.Gotham
+      NotificationContent.TextXAlignment = Enum.TextXAlignment.Left
+      NotificationContent.TextWrapped = true
+      NotificationContent.TextTruncate = Enum.TextTruncate.AtEnd
+      
+      local CloseNotificationButton = Instance.new("TextButton")
+      CloseNotificationButton.Parent = NotificationFrame
+      CloseNotificationButton.BackgroundColor3 = Theme.Error
+      CloseNotificationButton.BackgroundTransparency = 0.8
+      CloseNotificationButton.BorderSizePixel = 0
+      CloseNotificationButton.Size = UDim2.fromOffset(24, 24)
+      CloseNotificationButton.Position = UDim2.new(1, -32, 0, 8)
+      CloseNotificationButton.Text = "✕"
+      CloseNotificationButton.TextColor3 = Theme.Error
+      CloseNotificationButton.TextSize = 14
+      CloseNotificationButton.Font = Enum.Font.GothamBold
+      CloseNotificationButton.TextTransparency = 0.3
+      
+      local CloseNotificationCorner = Instance.new("UICorner")
+      CloseNotificationCorner.CornerRadius = UDim.new(0, 8)
+      CloseNotificationCorner.Parent = CloseNotificationButton
+      
+      CloseNotificationButton.MouseEnter:Connect(function()
+          CreateTween(CloseNotificationButton, TweenInfo.new(0.2), {
+              BackgroundTransparency = 0.2,
+              TextTransparency = 0
+          }):Play()
+      end)
+      
+      CloseNotificationButton.MouseLeave:Connect(function()
+          CreateTween(CloseNotificationButton, TweenInfo.new(0.2), {
+              BackgroundTransparency = 0.8,
+              TextTransparency = 0.3
+          }):Play()
+      end)
+      
+      NotificationFrame.Position = UDim2.new(1, 30, 0, 0)
+      NotificationFrame.BackgroundTransparency = 1
+      NotificationStroke.Transparency = 1
+      
+      CreateTween(NotificationFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+          BackgroundTransparency = 0.1
+      }):Play()
+      
+      CreateTween(NotificationStroke, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+          Transparency = 0.3
+      }):Play()
+      
+      CreateTween(NotificationFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+          Position = UDim2.new(0, 0, 0, 0)
+      }):Play()
+      
+      local function CloseNotification()
+          CreateTween(NotificationFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
+              Position = UDim2.new(1, 30, 0, 0),
+              BackgroundTransparency = 1
+          }):Play()
+          
+          CreateTween(NotificationStroke, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
+              Transparency = 1
+          }):Play()
+          
+          task.wait(0.3)
+          NotificationFrame:Destroy()
+      end
+      
+      CloseNotificationButton.MouseButton1Click:Connect(CloseNotification)
+      
+      if Duration and Duration > 0 then
+          task.spawn(function()
+              task.wait(Duration + 0.4)
+              if NotificationFrame.Parent then
+                  CloseNotification()
+              end
+          end)
+      end
+      
+      NotificationFrame.InputBegan:Connect(function(input)
+          if input.UserInputType == Enum.UserInputType.MouseButton1 then
+              CloseNotification()
+          end
+      end)
+  end
 
-   CreateTween(LoadingProgress, TweenInfo.new(LoadingTime, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-       Size = UDim2.fromScale(1, 1)
-   }):Play()
+  local function SwitchToTab(tab)
+      for _, existingTab in pairs(Window.Tabs or {}) do
+          if existingTab.ContentFrame then
+              existingTab.ContentFrame.Visible = false
+          end
+          if existingTab.TabButton then
+              CreateTween(existingTab.TabButton, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+                  BackgroundTransparency = 1,
+                  TextTransparency = 0.3
+              }):Play()
+              if existingTab.TabIcon then
+                  CreateTween(existingTab.TabIcon, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+                      ImageTransparency = 0.3
+                  }):Play()
+              end
+          end
+      end
+      
+      if tab.ContentFrame then
+          tab.ContentFrame.Visible = true
+      end
+      if tab.TabButton then
+          CreateTween(tab.TabButton, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+              BackgroundTransparency = 0.85,
+              TextTransparency = 0
+          }):Play()
+          if tab.TabIcon then
+              CreateTween(tab.TabIcon, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+                  ImageTransparency = 0
+              }):Play()
+          end
+      end
+      
+      currentTab = tab
+  end
 
-   task.wait(LoadingTime)
-   
-   CreateTween(WelcomeFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
-       Size = UDim2.fromOffset(0, 0),
-       Position = UDim2.fromScale(0.5, 0.5)
-   }):Play()
+  function Window:AddTab(config)
+      local TabTitle = config.Title or "Tab"
+      local TabIcon = config.Icon or ""
+      local IconId = GetIconId(TabIcon)
+      
+      local Tab = {}
+      Tab.Title = TabTitle
+      Tab.Icon = TabIcon
+      
+      local TabButton = Instance.new("TextButton")
+      TabButton.Parent = TabsFrame
+      TabButton.BackgroundColor3 = Theme.Text
+      TabButton.BackgroundTransparency = 1
+      TabButton.BorderSizePixel = 0
+      TabButton.Size = UDim2.new(1, 0, 0, 40)
+      TabButton.Text = ""
+      
+      local TabButtonCorner = Instance.new("UICorner")
+      TabButtonCorner.CornerRadius = UDim.new(0, 12)
+      TabButtonCorner.Parent = TabButton
+      
+      local TabIconLabel = nil
+      if IconId and IconId ~= "" then
+          TabIconLabel = Instance.new("ImageLabel")
+          TabIconLabel.Parent = TabButton
+          TabIconLabel.BackgroundTransparency = 1
+          TabIconLabel.Size = UDim2.fromOffset(20, 20)
+          TabIconLabel.Position = UDim2.fromOffset(12, 10)
+          TabIconLabel.Image = IconId
+          TabIconLabel.ImageTransparency = 0.3
+          TabIconLabel.ScaleType = Enum.ScaleType.Fit
+      end
+      
+      local TabTitleLabel = Instance.new("TextLabel")
+      TabTitleLabel.Parent = TabButton
+      TabTitleLabel.BackgroundTransparency = 1
+      TabTitleLabel.Size = UDim2.new(1, TabIconLabel and -45 or -24, 1, 0)
+      TabTitleLabel.Position = UDim2.fromOffset(TabIconLabel and 40 or 12, 0)
+      TabTitleLabel.Text = TabTitle
+      TabTitleLabel.TextColor3 = Theme.Text
+      TabTitleLabel.TextSize = 14
+      TabTitleLabel.Font = Enum.Font.GothamMedium
+      TabTitleLabel.TextXAlignment = Enum.TextXAlignment.Left
+      TabTitleLabel.TextTransparency = 0.3
+      
+      local TabContentFrame = Instance.new("Frame")
+      TabContentFrame.Parent = ContentFrame
+      TabContentFrame.BackgroundTransparency = 1
+      TabContentFrame.Size = UDim2.new(1, 0, 1, 0)
+      TabContentFrame.Position = UDim2.fromScale(0, 0)
+      TabContentFrame.Visible = false
+      
+      Tab.TabButton = TabButton
+      Tab.TabIcon = TabIconLabel
+      Tab.ContentFrame = TabContentFrame
+      
+      TabButton.MouseEnter:Connect(function()
+          if currentTab ~= Tab then
+              CreateTween(TabButton, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+                  BackgroundTransparency = 0.9
+              }):Play()
+              CreateTween(TabTitleLabel, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+                  TextTransparency = 0.1
+              }):Play()
+              if TabIconLabel then
+                  CreateTween(TabIconLabel, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+                      ImageTransparency = 0.1
+                  }):Play()
+              end
+          end
+      end)
+      
+      TabButton.MouseLeave:Connect(function()
+          if currentTab ~= Tab then
+              CreateTween(TabButton, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+                  BackgroundTransparency = 1
+              }):Play()
+              CreateTween(TabTitleLabel, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+                  TextTransparency = 0.3
+              }):Play()
+              if TabIconLabel then
+                  CreateTween(TabIconLabel, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+                      ImageTransparency = 0.3
+                  }):Play()
+              end
+          end
+      end)
+      
+      TabButton.MouseButton1Click:Connect(function()
+          SwitchToTab(Tab)
+      end)
+      
+      if not Window.Tabs then
+          Window.Tabs = {}
+      end
+      table.insert(Window.Tabs, Tab)
+      
+      if #Window.Tabs == 1 then
+          SwitchToTab(Tab)
+      end
+      
+      return Tab
+  end
 
-   task.wait(0.4)
-   WelcomeFrame:Destroy()
-   MainFrame.Visible = true
-   MainFrame.Size = UDim2.fromOffset(0, 0)
-   CreateTween(MainFrame, TweenInfo.new(0.6, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-       Size = Size
-   }):Play()
+  CreateTween(LoadingProgress, TweenInfo.new(LoadingTime, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+      Size = UDim2.fromScale(1, 1)
+  }):Play()
 
-   Window.MainFrame = MainFrame
-   Window.ContentFrame = ContentFrame
-   Window.ScreenGui = ScreenGui
-   Window.CloseButton = CloseButton
-   Window.MinimizeButton = MinimizeButton
-   Window.MaximizeButton = MaximizeButton
-   Window.NotificationContainer = NotificationContainer
-   Window.Theme = Theme
-   Window.TitleIcon = TitleIcon
-   Window.FloatingIcon = FloatingIcon
-   Window.TimeLabel = TimeLabel
-   Window.TimerConnection = timerConnection
-   
-   function Window:SetIcon(imageId)
-       TitleIcon.Image = imageId
-       FloatingIcon.Image = imageId
-   end
-   
-   function Window:Destroy()
-       if timerConnection then
-           timerConnection:Disconnect()
-       end
-       ScreenGui:Destroy()
-   end
-   
-   return Window
+  task.wait(LoadingTime)
+  
+  CreateTween(WelcomeFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
+      Size = UDim2.fromOffset(0, 0),
+      Position = UDim2.fromScale(0.5, 0.5)
+  }):Play()
+
+  task.wait(0.4)
+  WelcomeFrame:Destroy()
+  MainFrame.Visible = true
+  MainFrame.Size = UDim2.fromOffset(0, 0)
+  CreateTween(MainFrame, TweenInfo.new(0.6, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+      Size = Size
+  }):Play()
+
+  Window.MainFrame = MainFrame
+  Window.ContentFrame = ContentFrame
+  Window.ScreenGui = ScreenGui
+  Window.CloseButton = CloseButton
+  Window.MinimizeButton = MinimizeButton
+  Window.MaximizeButton = MaximizeButton
+  Window.NotificationContainer = NotificationContainer
+  Window.Theme = Theme
+  Window.TitleIcon = TitleIcon
+  Window.FloatingIcon = FloatingIcon
+  Window.TimeLabel = TimeLabel
+  Window.TimerConnection = timerConnection
+  Window.TabsFrame = TabsFrame
+  Window.Tabs = {}
+  
+  function Window:SetIcon(imageId)
+      TitleIcon.Image = imageId
+      FloatingIcon.Image = imageId
+  end
+  
+  function Window:Destroy()
+      if timerConnection then
+          timerConnection:Disconnect()
+      end
+      ScreenGui:Destroy()
+  end
+  
+  return Window
 end
 
 return FRONT_GUI
