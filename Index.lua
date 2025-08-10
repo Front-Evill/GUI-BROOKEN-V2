@@ -102,12 +102,6 @@ local Themes = {
 local Icons = {
    settings = "rbxassetid://10734950309"
    home = "rbxassetid://120888025715075"
-   userround = "rbxassetid://114595048110910"
-   server = "rbxassetid://73510630665115"
-   servercrash = "rbxassetid://95968073750311"
-   teleport = "rbxassetid://120501993683274"
-   delete = "rbxassetid://118135004396306"
-   scan = "rbxassetid://74818383222024"
 }
 
 local function GetIconId(iconName)
