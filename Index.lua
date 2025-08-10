@@ -105,7 +105,7 @@ local Icons = {
    user-round = "rbxassetid://114595048110910"
    server = "rbxassetid://73510630665115"
    server-crash = "rbxassetid://95968073750311"
-   Teleport = "rbxassetid://120501993683274"
+   teleport = "rbxassetid://120501993683274"
    delete = "rbxassetid://118135004396306"
    scan = "rbxassetid://74818383222024"
 }
