@@ -4,6 +4,7 @@ local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 local CoreGui = game:GetService("CoreGui")
 local Debris = game:GetService("Debris")
+local SoundService = game:GetService("SoundService")
 
 local Player = Players.LocalPlayer
 local PlayerGui = Player:WaitForChild("PlayerGui")
@@ -140,6 +141,23 @@ local function GetAccountAge(player)
    end
 end
 
+local function PlaySound(soundId, volume, pitch)
+   if soundId and soundId ~= "" then
+       local sound = Instance.new("Sound")
+       sound.SoundId = "rbxassetid://" .. soundId
+       sound.Volume = volume or 0.5
+       sound.PlaybackSpeed = pitch or 1
+       sound.Parent = SoundService
+       sound:Play()
+       
+       sound.Ended:Connect(function()
+           sound:Destroy()
+       end)
+       
+       Debris:AddItem(sound, 10)
+   end
+end
+
 function FRONT_GUI:CreateWindow(config)
    local Window = {}
    
@@ -150,6 +168,11 @@ function FRONT_GUI:CreateWindow(config)
    local Size = config.Size or UDim2.fromOffset(750, 500)
    local ThemeName = config.Theme or "Dark"
    local MinimizeKey = config.MinimizeKey or Enum.KeyCode.B
+   local Icon = config.Icon or ""
+   local FloatingIcon = config.FloatingIcon or config.Icon or ""
+   local SoundId = config.SoundId or ""
+   local SoundVolume = config.SoundVolume or 0.5
+   local SoundPitch = config.SoundPitch or 1
    
    local Theme = Themes[ThemeName] or Themes.Dark
 
@@ -382,53 +405,70 @@ function FRONT_GUI:CreateWindow(config)
    TitleIcon.BackgroundColor3 = Theme.Accent
    TitleIcon.BackgroundTransparency = 0.2
    TitleIcon.BorderSizePixel = 0
-   TitleIcon.Size = UDim2.fromOffset(28, 28)
-   TitleIcon.Position = UDim2.fromOffset(16, 11)
+   TitleIcon.Size = UDim2.fromOffset(30, 30)
+   TitleIcon.Position = UDim2.fromOffset(15, 10)
 
    local TitleIconCorner = Instance.new("UICorner")
-   TitleIconCorner.CornerRadius = UDim.new(0, 8)
+   TitleIconCorner.CornerRadius = UDim.new(0, 10)
    TitleIconCorner.Parent = TitleIcon
 
    local TitleIconStroke = Instance.new("UIStroke")
    TitleIconStroke.Color = Theme.Accent
-   TitleIconStroke.Thickness = 1
-   TitleIconStroke.Transparency = 0.5
+   TitleIconStroke.Thickness = 1.5
+   TitleIconStroke.Transparency = 0.4
    TitleIconStroke.Parent = TitleIcon
 
    local TitleIconGrad = Instance.new("UIGradient")
    TitleIconGrad.Color = ColorSequence.new{
        ColorSequenceKeypoint.new(0, Theme.Accent),
-       ColorSequenceKeypoint.new(1, Color3.fromRGB(
-           math.min(255, Theme.Accent.R * 255 * 1.3),
-           math.min(255, Theme.Accent.G * 255 * 1.3),
-           math.min(255, Theme.Accent.B * 255 * 1.3)
-       ))
+       ColorSequenceKeypoint.new(0.5, Color3.fromRGB(
+           math.min(255, Theme.Accent.R * 255 * 1.4),
+           math.min(255, Theme.Accent.G * 255 * 1.4),
+           math.min(255, Theme.Accent.B * 255 * 1.4)
+       )),
+       ColorSequenceKeypoint.new(1, Theme.Accent)
    }
    TitleIconGrad.Rotation = 45
    TitleIconGrad.Parent = TitleIcon
 
-   local FrontLogo = Instance.new("TextLabel")
-   FrontLogo.Parent = TitleIcon
-   FrontLogo.BackgroundTransparency = 1
-   FrontLogo.Size = UDim2.new(1, 0, 1, 0)
-   FrontLogo.Position = UDim2.new(0, 0, 0, 0)
-   FrontLogo.Text = "F"
-   FrontLogo.TextColor3 = Color3.fromRGB(255, 255, 255)
-   FrontLogo.TextSize = 16
-   FrontLogo.Font = Enum.Font.GothamBold
-   FrontLogo.TextStrokeTransparency = 0.8
-   FrontLogo.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+   local TitleIconImage = Instance.new("ImageLabel")
+   TitleIconImage.Parent = TitleIcon
+   TitleIconImage.BackgroundTransparency = 1
+   TitleIconImage.Size = UDim2.new(0.8, 0, 0.8, 0)
+   TitleIconImage.Position = UDim2.new(0.5, 0, 0.5, 0)
+   TitleIconImage.AnchorPoint = Vector2.new(0.5, 0.5)
+   TitleIconImage.Image = Icon ~= "" and ("rbxassetid://" .. Icon) or ""
+   TitleIconImage.ImageColor3 = Color3.fromRGB(255, 255, 255)
+   TitleIconImage.ScaleType = Enum.ScaleType.Fit
 
-   local IconPulse = CreateTween(TitleIcon, TweenInfo.new(2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), {
+   local TitleIconShadow = Instance.new("Frame")
+   TitleIconShadow.Parent = TitleBar
+   TitleIconShadow.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+   TitleIconShadow.BackgroundTransparency = 0.85
+   TitleIconShadow.BorderSizePixel = 0
+   TitleIconShadow.Size = UDim2.fromOffset(30, 30)
+   TitleIconShadow.Position = UDim2.fromOffset(17, 12)
+   TitleIconShadow.ZIndex = TitleIcon.ZIndex - 1
+
+   local TitleIconShadowCorner = Instance.new("UICorner")
+   TitleIconShadowCorner.CornerRadius = UDim.new(0, 10)
+   TitleIconShadowCorner.Parent = TitleIconShadow
+
+   local IconPulse = CreateTween(TitleIcon, TweenInfo.new(2.5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), {
        BackgroundTransparency = 0.5
    })
    IconPulse:Play()
+
+   local IconGlow = CreateTween(TitleIconStroke, TweenInfo.new(2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), {
+       Transparency = 0.1
+   })
+   IconGlow:Play()
 
    local TitleLabel = Instance.new("TextLabel")
    TitleLabel.Parent = TitleBar
    TitleLabel.BackgroundTransparency = 1
    TitleLabel.Size = UDim2.new(0, 170, 0, 20)
-   TitleLabel.Position = UDim2.fromOffset(52, 10)
+   TitleLabel.Position = UDim2.fromOffset(54, 10)
    TitleLabel.Text = Title
    TitleLabel.TextColor3 = Theme.Text
    TitleLabel.TextSize = 15
@@ -439,7 +479,7 @@ function FRONT_GUI:CreateWindow(config)
    SubTitleLabel.Parent = TitleBar
    SubTitleLabel.BackgroundTransparency = 1
    SubTitleLabel.Size = UDim2.new(0, 140, 0, 15)
-   SubTitleLabel.Position = UDim2.fromOffset(52, 28)
+   SubTitleLabel.Position = UDim2.fromOffset(54, 28)
    SubTitleLabel.Text = SubTitle
    SubTitleLabel.TextColor3 = Theme.SubText
    SubTitleLabel.TextSize = 11
@@ -514,68 +554,95 @@ function FRONT_GUI:CreateWindow(config)
    ContentFrame.Size = UDim2.new(1, -25, 1, -70)
    ContentFrame.Position = UDim2.fromOffset(12, 58)
 
-   local FloatingIcon = Instance.new("Frame")
-   FloatingIcon.Name = "FloatingIcon"
-   FloatingIcon.Parent = ScreenGui
-   FloatingIcon.BackgroundColor3 = Theme.Accent
-   FloatingIcon.BackgroundTransparency = 0.1
-   FloatingIcon.BorderSizePixel = 0
-   FloatingIcon.Size = UDim2.fromOffset(58, 58)
-   FloatingIcon.Position = UDim2.fromOffset(25, 25)
-   FloatingIcon.Visible = false
+   local FloatingIconFrame = Instance.new("Frame")
+   FloatingIconFrame.Name = "FloatingIcon"
+   FloatingIconFrame.Parent = ScreenGui
+   FloatingIconFrame.BackgroundColor3 = Theme.Accent
+   FloatingIconFrame.BackgroundTransparency = 0.1
+   FloatingIconFrame.BorderSizePixel = 0
+   FloatingIconFrame.Size = UDim2.fromOffset(60, 60)
+   FloatingIconFrame.Position = UDim2.fromOffset(25, 25)
+   FloatingIconFrame.Visible = false
 
    local FloatingCorner = Instance.new("UICorner")
    FloatingCorner.CornerRadius = UDim.new(1, 0)
-   FloatingCorner.Parent = FloatingIcon
+   FloatingCorner.Parent = FloatingIconFrame
 
    local FloatingStroke = Instance.new("UIStroke")
    FloatingStroke.Color = Theme.Accent
-   FloatingStroke.Thickness = 2
+   FloatingStroke.Thickness = 2.5
    FloatingStroke.Transparency = 0.3
-   FloatingStroke.Parent = FloatingIcon
+   FloatingStroke.Parent = FloatingIconFrame
+
+   local FloatingShadow = Instance.new("Frame")
+   FloatingShadow.Parent = ScreenGui
+   FloatingShadow.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+   FloatingShadow.BackgroundTransparency = 0.8
+   FloatingShadow.BorderSizePixel = 0
+   FloatingShadow.Size = UDim2.fromOffset(60, 60)
+   FloatingShadow.Position = UDim2.fromOffset(27, 27)
+   FloatingShadow.Visible = false
+   FloatingShadow.ZIndex = FloatingIconFrame.ZIndex - 1
+
+   local FloatingShadowCorner = Instance.new("UICorner")
+   FloatingShadowCorner.CornerRadius = UDim.new(1, 0)
+   FloatingShadowCorner.Parent = FloatingShadow
 
    local FloatingButton = Instance.new("TextButton")
-   FloatingButton.Parent = FloatingIcon
+   FloatingButton.Parent = FloatingIconFrame
    FloatingButton.BackgroundTransparency = 1
    FloatingButton.Size = UDim2.new(1, 0, 1, 0)
-   FloatingButton.Text = "F"
-   FloatingButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-   FloatingButton.TextSize = 24
-   FloatingButton.Font = Enum.Font.GothamBold
-   FloatingButton.TextStrokeTransparency = 0.8
-   FloatingButton.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+   FloatingButton.Text = ""
+
+   local FloatingIconImage = Instance.new("ImageLabel")
+   FloatingIconImage.Parent = FloatingIconFrame
+   FloatingIconImage.BackgroundTransparency = 1
+   FloatingIconImage.Size = UDim2.new(0.7, 0, 0.7, 0)
+   FloatingIconImage.Position = UDim2.new(0.5, 0, 0.5, 0)
+   FloatingIconImage.AnchorPoint = Vector2.new(0.5, 0.5)
+   FloatingIconImage.Image = FloatingIcon ~= "" and ("rbxassetid://" .. FloatingIcon) or ""
+   FloatingIconImage.ImageColor3 = Color3.fromRGB(255, 255, 255)
+   FloatingIconImage.ScaleType = Enum.ScaleType.Fit
 
    local FloatingGrad = Instance.new("UIGradient")
    FloatingGrad.Color = ColorSequence.new{
        ColorSequenceKeypoint.new(0, Theme.Accent),
-       ColorSequenceKeypoint.new(1, Color3.fromRGB(
-           math.min(255, Theme.Accent.R * 255 * 1.2),
-           math.min(255, Theme.Accent.G * 255 * 1.2),
-           math.min(255, Theme.Accent.B * 255 * 1.2)
-       ))
+       ColorSequenceKeypoint.new(0.5, Color3.fromRGB(
+           math.min(255, Theme.Accent.R * 255 * 1.3),
+           math.min(255, Theme.Accent.G * 255 * 1.3),
+           math.min(255, Theme.Accent.B * 255 * 1.3)
+       )),
+       ColorSequenceKeypoint.new(1, Theme.Accent)
    }
    FloatingGrad.Rotation = 45
-   FloatingGrad.Parent = FloatingIcon
+   FloatingGrad.Parent = FloatingIconFrame
 
-   local FloatingPulse = CreateTween(FloatingIcon, TweenInfo.new(1.5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), {
-       Size = UDim2.fromOffset(62, 62)
+   local FloatingPulse = CreateTween(FloatingIconFrame, TweenInfo.new(1.8, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), {
+       Size = UDim2.fromOffset(65, 65)
    })
 
-   local FloatingRotate = CreateTween(FloatingGrad, TweenInfo.new(3, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1), {
+   local FloatingStrokePulse = CreateTween(FloatingStroke, TweenInfo.new(2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), {
+       Transparency = 0.1
+   })
+
+   local FloatingRotate = CreateTween(FloatingGrad, TweenInfo.new(4, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1), {
        Rotation = 405
    })
 
    MakeDraggable(MainFrame, TitleBar)
-   MakeDraggable(FloatingIcon, FloatingIcon)
+   MakeDraggable(FloatingIconFrame, FloatingIconFrame)
 
    local isMaximized = false
    local originalSize = Size
    local originalPosition = UDim2.fromScale(0.5, 0.5)
 
    local function ShowWindow()
+       PlaySound(SoundId, SoundVolume, SoundPitch)
        MainFrame.Visible = true
-       FloatingIcon.Visible = false
+       FloatingIconFrame.Visible = false
+       FloatingShadow.Visible = false
        FloatingPulse:Cancel()
+       FloatingStrokePulse:Cancel()
        FloatingRotate:Cancel()
        CreateTween(MainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
            Size = isMaximized and UDim2.fromScale(0.88, 0.88) or originalSize
@@ -588,8 +655,10 @@ function FRONT_GUI:CreateWindow(config)
        }):Play()
        task.wait(0.3)
        MainFrame.Visible = false
-       FloatingIcon.Visible = true
+       FloatingIconFrame.Visible = true
+       FloatingShadow.Visible = true
        FloatingPulse:Play()
+       FloatingStrokePulse:Play()
        FloatingRotate:Play()
    end
 
@@ -643,6 +712,24 @@ function FRONT_GUI:CreateWindow(config)
        }):Play()
    end)
 
+   FloatingButton.MouseEnter:Connect(function()
+       CreateTween(FloatingIconFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+           Size = UDim2.fromOffset(68, 68)
+       }):Play()
+       CreateTween(FloatingShadow, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+           Size = UDim2.fromOffset(68, 68)
+       }):Play()
+   end)
+   
+   FloatingButton.MouseLeave:Connect(function()
+       CreateTween(FloatingIconFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+           Size = UDim2.fromOffset(60, 60)
+       }):Play()
+       CreateTween(FloatingShadow, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+           Size = UDim2.fromOffset(60, 60)
+       }):Play()
+   end)
+
    CloseButton.MouseButton1Click:Connect(function()
        CreateTween(MainFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
            Size = UDim2.fromOffset(0, 0)
@@ -673,6 +760,11 @@ function FRONT_GUI:CreateWindow(config)
        local SubContent = config.SubContent or ""
        local Duration = config.Duration or 3
        local Type = config.Type or "Default"
+       local NotificationSoundId = config.SoundId or ""
+       local NotificationVolume = config.SoundVolume or 0.3
+       local NotificationPitch = config.SoundPitch or 1
+       
+       PlaySound(NotificationSoundId, NotificationVolume, NotificationPitch)
        
        NotificationCount = NotificationCount + 1
        
@@ -875,6 +967,8 @@ function FRONT_GUI:CreateWindow(config)
    Window.MaximizeButton = MaximizeButton
    Window.NotificationContainer = NotificationContainer
    Window.Theme = Theme
+   Window.TitleIcon = TitleIcon
+   Window.FloatingIcon = FloatingIconFrame
    
    return Window
 end
