@@ -100,7 +100,7 @@ local Themes = {
 }
 
 local Icons = {
-   settings = "rbxassetid://10734950309"
+   settings = "rbxassetid://10734950309",
    home = "rbxassetid://120888025715075"
 }
 
