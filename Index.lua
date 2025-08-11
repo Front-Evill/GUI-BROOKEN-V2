@@ -2316,7 +2316,7 @@ function FRONT_GUI:CreateWindow(config)
                   OptionButton.MouseLeave:Connect(function()
                       if not selectedValues[value] then
                           CreateTween(OptionFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
-                              BackgroundTransparency = 0.1
+                              BackgroundTransparency = 0.2
                               }):Play()
                       end
                   end)
