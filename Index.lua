@@ -1184,7 +1184,7 @@ function FRONT_GUI:CreateWindow(config)
           local SectionLayout = Instance.new("UIListLayout")
           SectionLayout.Parent = SectionContent
           SectionLayout.FillDirection = Enum.FillDirection.Vertical
-          SectionLayout.HorizontalAlignment = Enum.Horizontal
+          SectionLayout.HorizontalAlignment = Enum.HorizontalAlignment.Left
           SectionLayout.VerticalAlignment = Enum.VerticalAlignment.Top
           SectionLayout.Padding = UDim.new(0, 6)
           SectionLayout.SortOrder = Enum.SortOrder.LayoutOrder
