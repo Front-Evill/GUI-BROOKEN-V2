@@ -1,4 +1,4 @@
-# ًں“¦ FRONT EVILL GUI Library
+# FRONT EVILL GUI Library
 
 **FRONT EVILL GUI** is an advanced graphical user interface library for Roblox.  
 It is easy to use and includes all essential UI components for creating professional, interactive interfaces such as buttons, toggles, dropdowns, sliders, inputs, and notifications.
