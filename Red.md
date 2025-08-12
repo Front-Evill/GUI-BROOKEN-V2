@@ -5,7 +5,7 @@ It is easy to use and includes all essential UI components for creating professi
 
 ---
 
-## ًںڑ€ **Usage**
+##  **Usage**
 ```lua
 local FRONT_GUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Front-Evill/GUI-BROOKEN-V2/refs/heads/main/Index.lua"))()
 
@@ -23,7 +23,7 @@ local Window = FRONT_GUI:CreateWindow({
 
 ---
 
-## ًں–¥ **Components Documentation**
+## **Components Documentation**
 
 ### **Button**
 ```lua
@@ -160,7 +160,7 @@ Window:Notify({
 
 ---
 
-## ًں“Œ Notes
+## Notes
 - All components are easy to customize.
 - The library supports themes, icons, and full design control.
 - Perfect for creating control panels, tools, and Roblox scripts.
