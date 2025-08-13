@@ -222,8 +222,8 @@ function FRONT_GUI:CreateWindow(config)
    local SubTitle = config.SubTitle or "by: FRONT EVILL"
    local WelcomeText = config.WelcomeText or "Welcome to GUI"
    local LoadingTime = config.LoadingTime or 2
-   local Size = config.Size or UDim2.fromOffset(750, 500)
-   local ThemeName = config.Theme or "Dark"
+   local Size = config.Size or UDim2.fromOffset(580, 482)
+   local ThemeName = config.Theme or "Sky"
    local MinimizeKey = config.MinimizeKey or Enum.KeyCode.B
    local IconImage = config.IconImage or "rbxassetid://0"
    
@@ -2578,7 +2578,6 @@ function FRONT_GUI:CreateWindow(config)
               InputBox.TextSize = 12
               InputBox.Font = Enum.Font.Gotham
               InputBox.TextXAlignment = Enum.TextXAlignment.Left
-              InputBox.ClearButtonOnFocus = false
               
               local InputBoxCorner = Instance.new("UICorner")
               InputBoxCorner.CornerRadius = UDim.new(0, 8)
