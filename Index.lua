@@ -1533,7 +1533,8 @@ function FRONT_GUI:CreateWindow(config)
               ButtonClick.MouseLeave:Connect(function()
                   AnimateButton(false)
               end)
-              
+
+              --[[
               ButtonClick.MouseButton1Click:Connect(function()
                   CreateTween(ButtonFrame, TweenInfo.new(0.1, Enum.EasingStyle.Quad), {
                       Size = UDim2.new(1, -4, 0, ButtonDesc ~= "" and 61 or 41)
@@ -1551,6 +1552,7 @@ function FRONT_GUI:CreateWindow(config)
                       end
                   end
               end)
+              --]]
               
               return ButtonFrame
           end
